@@ -1,0 +1,38 @@
+package com.tugalsan.api.captcha.server;
+
+import com.tugalsan.api.captcha.client.TGS_CaptchaUtils;
+import com.tugalsan.api.log.server.TS_Log;
+import com.tugalsan.api.servlet.url.server.TS_SURLExecutor;
+import com.tugalsan.api.servlet.url.server.TS_SURLHelper;
+import com.tugalsan.api.validator.client.*;
+
+public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
+
+    final private static TS_Log d = TS_Log.of(TS_CaptchaSUEMemRefresh.class.getSimpleName());
+
+    @Override
+    public String name() {
+        return TGS_CaptchaUtils.SERVLET_REFRESH();
+    }
+
+    @Override
+    public void execute(TS_SURLHelper h) {
+        try {
+            var c = new TS_Captcha.Builder().buildPreffered(
+                    h.getParameterInteger("bg", false),
+                    h.getParameterInteger("gimp", false),
+                    h.getParameterInteger("border", false),
+                    h.getParameterInteger("txt", false),
+                    h.getParameterInteger("word", false),
+                    h.getParameterInteger("noise", false),
+                    onlyNumbers == null ? false : onlyNumbers.validate(h)
+            );
+            TS_CaptchaMemUtils.setServer(h.rq, c.getAnswer());
+            h.addHeaderNoCache().compileForPng().transferPng(c.getImage());
+        } catch (Exception e) {
+            d.ce("execute", e.getMessage());
+        }
+    }
+
+    public static TGS_ValidatorType1<TS_SURLHelper> onlyNumbers;
+}

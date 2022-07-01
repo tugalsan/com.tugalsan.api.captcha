@@ -12,6 +12,7 @@ import com.tugalsan.api.captcha.server.bg.*;
 import com.tugalsan.api.captcha.server.gimpy.*;
 import com.tugalsan.api.captcha.server.noise.*;
 import com.tugalsan.api.captcha.server.text.*;
+import com.tugalsan.api.unsafe.client.*;
 
 public final class TS_Captcha implements Serializable {
 
@@ -261,15 +262,18 @@ public final class TS_Captcha implements Serializable {
             return new TS_Captcha(this);
         }
 
-        private void writeObject(ObjectOutputStream out) throws IOException {
-            out.writeObject(_answer);
-            ImageIO.write(_img, "png", ImageIO.createImageOutputStream(out));
+        private void writeObject(ObjectOutputStream out) {
+            TGS_UnSafe.execute(() -> {
+                out.writeObject(_answer);
+                ImageIO.write(_img, "png", ImageIO.createImageOutputStream(out));
+            });
         }
 
-        private void readObject(ObjectInputStream in) throws IOException,
-                ClassNotFoundException {
-            _answer = (String) in.readObject();
-            _img = ImageIO.read(ImageIO.createImageInputStream(in));
+        private void readObject(ObjectInputStream in) {
+            TGS_UnSafe.execute(() -> {
+                _answer = (String) in.readObject();
+                _img = ImageIO.read(ImageIO.createImageInputStream(in));
+            });
         }
     }
 

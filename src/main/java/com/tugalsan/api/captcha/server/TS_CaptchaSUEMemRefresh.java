@@ -4,6 +4,7 @@ import com.tugalsan.api.captcha.client.TGS_CaptchaUtils;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.servlet.url.server.TS_SURLExecutor;
 import com.tugalsan.api.servlet.url.server.TS_SURLHelper;
+import com.tugalsan.api.unsafe.client.*;
 import com.tugalsan.api.validator.client.*;
 
 public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
@@ -17,7 +18,7 @@ public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
 
     @Override
     public void execute(TS_SURLHelper h) {
-        try {
+        TGS_UnSafe.execute(() -> {
             var c = new TS_Captcha.Builder().buildPreffered(
                     h.getParameterInteger("bg", false),
                     h.getParameterInteger("gimp", false),
@@ -29,9 +30,7 @@ public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
             );
             TS_CaptchaMemUtils.setServer(h.rq, c.getAnswer());
             h.addHeaderNoCache().compileForPng().transferPng(c.getImage());
-        } catch (Exception e) {
-            d.ce("execute", e.getMessage());
-        }
+        }, e -> d.ce("execute", e.getMessage()));
     }
 
     public static TGS_ValidatorType1<TS_SURLHelper> onlyNumbers;

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public class TS_CaptchaMemUtils {
 
-    final private static TS_Log d = TS_Log.of(TS_CaptchaMemUtils.class.getSimpleName());
+    final private static TS_Log d = TS_Log.of(TS_CaptchaMemUtils.class);
     final private static TS_ListSync<TS_CaptchaMemItem> SYNC = new TS_ListSync();
 
     public static void initialize() {

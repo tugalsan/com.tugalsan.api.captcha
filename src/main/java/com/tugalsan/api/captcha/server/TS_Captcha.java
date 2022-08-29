@@ -16,7 +16,7 @@ import com.tugalsan.api.unsafe.client.*;
 
 public final class TS_Captcha implements Serializable {
 
-    final private static TS_Log d = TS_Log.of(TS_Captcha.class.getSimpleName());
+    final private static TS_Log d = TS_Log.of(TS_Captcha.class);
 
     private final Builder _builder;
 

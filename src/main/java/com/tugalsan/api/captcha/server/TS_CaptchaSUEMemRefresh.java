@@ -9,7 +9,7 @@ import com.tugalsan.api.validator.client.*;
 
 public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
 
-    final private static TS_Log d = TS_Log.of(TS_CaptchaSUEMemRefresh.class.getSimpleName());
+    final private static TS_Log d = TS_Log.of(TS_CaptchaSUEMemRefresh.class);
 
     @Override
     public String name() {

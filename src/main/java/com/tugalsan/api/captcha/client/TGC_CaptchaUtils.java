@@ -10,7 +10,7 @@ import com.tugalsan.api.url.client.builder.TGS_UrlBuilderUtils;
 
 public class TGC_CaptchaUtils {
 
-    final private static TGC_Log d = TGC_Log.of(TGC_CaptchaUtils.class.getSimpleName());
+    final private static TGC_Log d = TGC_Log.of(TGC_CaptchaUtils.class);
 
     public static String newUrl(CharSequence domain, Integer port, CharSequence spi) {
         var newUrlCaptcha = TGS_UrlBuilderUtils.https()

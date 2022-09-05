@@ -19,7 +19,7 @@ public class TS_CaptchaMemUtils {
     public static void initialize() {
         TS_SURLExecutorList.add(new TS_CaptchaSUEMemRefresh());
         TS_ThreadRunUtils.everyMinutes(false, 10, () -> {
-            var tenMinutesAgo = new TGS_Time();
+            var tenMinutesAgo = TGS_Time.of();
             tenMinutesAgo.incrementSecond(-600);
             SYNC.removeAll(item -> item.time.hasSmaller(tenMinutesAgo));
             d.ci("initialize", "cleanUp.done");
@@ -75,7 +75,7 @@ public class TS_CaptchaMemUtils {
     }
 
     public static void setServer(CharSequence clientIp, CharSequence answer) {
-        var now = new TGS_Time();
+        var now = TGS_Time.of();
         var found = getServer(clientIp);
         if (found != null) {
             found.time = now;

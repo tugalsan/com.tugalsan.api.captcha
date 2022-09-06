@@ -19,9 +19,7 @@ public class TS_CaptchaMemUtils {
     public static void initialize() {
         TS_SURLExecutorList.add(new TS_CaptchaSUEMemRefresh());
         TS_ThreadRunUtils.everyMinutes(false, 10, () -> {
-            var tenMinutesAgo = TGS_Time.of();
-            tenMinutesAgo.incrementSecond(-600);
-            SYNC.removeAll(item -> item.time.hasSmaller(tenMinutesAgo));
+            SYNC.removeAll(item -> item.time.hasSmaller(TGS_Time.ofMinutesAgo(10)));
             d.ci("initialize", "cleanUp.done");
         });
     }

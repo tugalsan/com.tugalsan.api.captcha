@@ -1,7 +1,7 @@
 package com.tugalsan.api.captcha.server;
 
 import com.tugalsan.api.captcha.client.TGS_CaptchaUtils;
-import com.tugalsan.api.list.server.TS_ListSync;
+import com.tugalsan.api.list.server.TS_ThreadSafeLst;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.network.server.TS_NetworkIPUtils;
 import com.tugalsan.api.servlet.url.server.TS_SURLExecutorList;
@@ -14,11 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 public class TS_CaptchaMemUtils {
 
     final private static TS_Log d = TS_Log.of(TS_CaptchaMemUtils.class);
-    final private static TS_ListSync<TS_CaptchaMemItem> SYNC = new TS_ListSync();
+    final private static TS_ThreadSafeLst<TS_CaptchaMemItem> SYNC = new TS_ThreadSafeLst();
 
     public static void initialize() {
         TS_SURLExecutorList.add(new TS_CaptchaSUEMemRefresh());
-        TS_ThreadRunUtils.everyMinutes(false, 10, () -> {
+        TS_ThreadRun.everyMinutes(false, 10, () -> {
             SYNC.removeAll(item -> item.time.hasSmaller(TGS_Time.ofMinutesAgo(10)));
             d.ci("initialize", "cleanUp.done");
         });

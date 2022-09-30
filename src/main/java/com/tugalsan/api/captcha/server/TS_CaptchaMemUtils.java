@@ -1,7 +1,6 @@
 package com.tugalsan.api.captcha.server;
 
 import com.tugalsan.api.captcha.client.TGS_CaptchaUtils;
-import com.tugalsan.api.list.server.TS_ThreadSafeLst;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.network.server.TS_NetworkIPUtils;
 import com.tugalsan.api.servlet.url.server.TS_SURLExecutorList;

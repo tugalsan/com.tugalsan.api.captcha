@@ -34,7 +34,9 @@ public class TS_CaptchaMemUtils {
             d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "captchaClient.guess==null");
             return false;
         }
-        var result = captchaClient.guess.toString().compareToIgnoreCase(String.valueOf(captchaServer.answer)) == 0;
+        var result = captchaClient.guess.toString().compareToIgnoreCase(//NO TURKISH CHECK NEEDED
+                String.valueOf(captchaServer.answer)
+        ) == 0;
         if (!result) {
             d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA",
                     "client", captchaClient.clientIp, captchaClient.guess,

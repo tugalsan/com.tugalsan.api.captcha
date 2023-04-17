@@ -17,8 +17,8 @@ public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
     }
 
     @Override
-    public void execute(TS_SURLHelper h) {
-        TGS_UnSafe.execute(() -> {
+    public void run(TS_SURLHelper h) {
+        TGS_UnSafe.run(() -> {
             var c = new TS_Captcha.Builder().buildPreffered(
                     h.getParameterInteger("bg", false),
                     h.getParameterInteger("gimp", false),
@@ -30,7 +30,7 @@ public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
             );
             TS_CaptchaMemUtils.setServer(h.rq, c.getAnswer());
             h.addHeaderNoCache().compileForPng().transferPng(c.getImage());
-        }, e -> d.ce("execute", e.getMessage()));
+        }, e -> d.ce("run", e.getMessage()));
     }
 
     public static TGS_ValidatorType1<TS_SURLHelper> onlyNumbers;

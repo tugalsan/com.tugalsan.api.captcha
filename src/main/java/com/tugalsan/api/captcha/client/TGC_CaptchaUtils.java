@@ -1,7 +1,7 @@
 package com.tugalsan.api.captcha.client;
 
 import com.google.gwt.user.client.ui.Image;
-import com.tugalsan.api.executable.client.TGS_Executable;
+import com.tugalsan.api.runnable.client.TGS_Runnable;
 import com.tugalsan.api.log.client.TGC_Log;
 import com.tugalsan.api.pack.client.TGS_Pack1;
 import com.tugalsan.api.servlet.url.client.TGS_SURLUtils;
@@ -23,17 +23,17 @@ public class TGC_CaptchaUtils {
     }
 
     @Deprecated //NOT WORKING
-    public static void onErrorRecursiveReload(Image imgCaptcha, TGS_Executable onRefreshCaptcha, int imgCaptchaSecWait) {
+    public static void onErrorRecursiveReload(Image imgCaptcha, TGS_Runnable onRefreshCaptcha, int imgCaptchaSecWait) {
         TGS_Pack1<Boolean> imgCaptchaLoaded = new TGS_Pack1(false);
-        d.cr("execute", "UYARI: Test resmi bekleniyor... ", imgCaptchaSecWait, "saniye içinde gelmez ise yenilenecek!");
+        d.cr("run", "UYARI: Test resmi bekleniyor... ", imgCaptchaSecWait, "saniye içinde gelmez ise yenilenecek!");
         imgCaptcha.addLoadHandler(e -> {
             imgCaptchaLoaded.value0 = true;
-            d.cr("execute", "BİLGİ: Test resmi yüklendi.");
+            d.cr("run", "BİLGİ: Test resmi yüklendi.");
         });
-        TGC_ThreadUtils.execute_afterSeconds_afterGUIUpdate(t -> {
+        TGC_ThreadUtils.run_afterSeconds_afterGUIUpdate(t -> {
             if (!imgCaptchaLoaded.value0) {
-                d.ce("execute", "HATA: Test resmi yenileniyor...");
-                onRefreshCaptcha.execute();
+                d.ce("run", "HATA: Test resmi yenileniyor...");
+                onRefreshCaptcha.run();
                 onErrorRecursiveReload(imgCaptcha, onRefreshCaptcha, imgCaptchaSecWait);
             }
         }, imgCaptchaSecWait);

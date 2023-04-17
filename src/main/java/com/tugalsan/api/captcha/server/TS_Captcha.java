@@ -263,14 +263,14 @@ public final class TS_Captcha implements Serializable {
         }
 
         private void writeObject(ObjectOutputStream out) {
-            TGS_UnSafe.execute(() -> {
+            TGS_UnSafe.run(() -> {
                 out.writeObject(_answer);
                 ImageIO.write(_img, "png", ImageIO.createImageOutputStream(out));
             });
         }
 
         private void readObject(ObjectInputStream in) {
-            TGS_UnSafe.execute(() -> {
+            TGS_UnSafe.run(() -> {
                 _answer = (String) in.readObject();
                 _img = ImageIO.read(ImageIO.createImageInputStream(in));
             });

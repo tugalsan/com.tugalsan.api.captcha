@@ -1,11 +1,8 @@
 package com.tugalsan.api.captcha.client;
 
 import com.google.gwt.user.client.ui.Image;
-import com.tugalsan.api.runnable.client.TGS_Runnable;
 import com.tugalsan.api.log.client.TGC_Log;
-import com.tugalsan.api.tuple.client.TGS_Tuple1;
 import com.tugalsan.api.servlet.url.client.TGS_SURLUtils;
-import com.tugalsan.api.thread.client.TGC_ThreadUtils;
 import com.tugalsan.api.url.client.builder.TGS_UrlBuilderUtils;
 
 public class TGC_CaptchaUtils {

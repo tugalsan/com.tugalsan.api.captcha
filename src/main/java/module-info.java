@@ -2,7 +2,6 @@ module com.tugalsan.api.captcha {
     requires java.desktop;
     requires gwt.user;
     requires com.tugalsan.api.thread;
-    requires com.tugalsan.api.tuple;
     requires com.tugalsan.api.log;
     requires com.tugalsan.api.unsafe;
     requires com.tugalsan.api.list;

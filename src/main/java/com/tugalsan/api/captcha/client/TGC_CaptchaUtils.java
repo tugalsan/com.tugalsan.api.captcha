@@ -3,7 +3,7 @@ package com.tugalsan.api.captcha.client;
 import com.google.gwt.user.client.ui.Image;
 import com.tugalsan.api.runnable.client.TGS_Runnable;
 import com.tugalsan.api.log.client.TGC_Log;
-import com.tugalsan.api.pack.client.TGS_Pack1;
+import com.tugalsan.api.tuple.client.TGS_Tuple1;
 import com.tugalsan.api.servlet.url.client.TGS_SURLUtils;
 import com.tugalsan.api.thread.client.TGC_ThreadUtils;
 import com.tugalsan.api.url.client.builder.TGS_UrlBuilderUtils;
@@ -24,7 +24,7 @@ public class TGC_CaptchaUtils {
 
     @Deprecated //NOT WORKING
     public static void onErrorRecursiveReload(Image imgCaptcha, TGS_Runnable onRefreshCaptcha, int imgCaptchaSecWait) {
-        TGS_Pack1<Boolean> imgCaptchaLoaded = new TGS_Pack1(false);
+        TGS_Tuple1<Boolean> imgCaptchaLoaded = new TGS_Tuple1(false);
         d.cr("run", "UYARI: Test resmi bekleniyor... ", imgCaptchaSecWait, "saniye içinde gelmez ise yenilenecek!");
         imgCaptcha.addLoadHandler(e -> {
             imgCaptchaLoaded.value0 = true;

@@ -21,21 +21,4 @@ public class TGC_CaptchaUtils {
         Image.prefetch(newUrlCaptcha);
         return newUrlCaptcha;
     }
-
-    @Deprecated //NOT WORKING
-    public static void onErrorRecursiveReload(Image imgCaptcha, TGS_Runnable onRefreshCaptcha, int imgCaptchaSecWait) {
-        TGS_Tuple1<Boolean> imgCaptchaLoaded = new TGS_Tuple1(false);
-        d.cr("run", "UYARI: Test resmi bekleniyor... ", imgCaptchaSecWait, "saniye içinde gelmez ise yenilenecek!");
-        imgCaptcha.addLoadHandler(e -> {
-            imgCaptchaLoaded.value0 = true;
-            d.cr("run", "BİLGİ: Test resmi yüklendi.");
-        });
-        TGC_ThreadUtils.run_afterSeconds_afterGUIUpdate(t -> {
-            if (!imgCaptchaLoaded.value0) {
-                d.ce("run", "HATA: Test resmi yenileniyor...");
-                onRefreshCaptcha.run();
-                onErrorRecursiveReload(imgCaptcha, onRefreshCaptcha, imgCaptchaSecWait);
-            }
-        }, imgCaptchaSecWait);
-    }
 }

@@ -4,7 +4,7 @@ import com.tugalsan.api.captcha.client.TGS_CaptchaUtils;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.network.server.TS_NetworkIPUtils;
 import com.tugalsan.api.servlet.url.server.TS_SURLExecutorList;
-import com.tugalsan.api.thread.server.async.TS_ThreadAsync;
+import com.tugalsan.api.thread.server.struct.async.TS_ThreadAsync;
 import com.tugalsan.api.thread.server.safe.TS_ThreadSafeLst;
 import com.tugalsan.api.time.client.TGS_Time;
 import com.tugalsan.api.url.server.TS_UrlServletRequestUtils;

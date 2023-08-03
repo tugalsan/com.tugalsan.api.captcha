@@ -4,9 +4,9 @@ import com.tugalsan.api.captcha.client.TGS_CaptchaUtils;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.network.server.TS_NetworkIPUtils;
 import com.tugalsan.api.servlet.url.server.TS_SURLExecutorList;
-import com.tugalsan.api.thread.server.safe.TS_ThreadSafeTrigger;
+import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
 import com.tugalsan.api.thread.server.async.TS_ThreadAsyncScheduled;
-import com.tugalsan.api.thread.server.safe.TS_ThreadSafeLst;
+import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
 import com.tugalsan.api.time.client.TGS_Time;
 import com.tugalsan.api.url.server.TS_UrlServletRequestUtils;
 import java.util.Objects;
@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 public class TS_CaptchaMemUtils {
 
     final private static TS_Log d = TS_Log.of(TS_CaptchaMemUtils.class);
-    final private static TS_ThreadSafeLst<TS_CaptchaMemItem> SYNC = new TS_ThreadSafeLst();
+    final private static TS_ThreadSyncLst<TS_CaptchaMemItem> SYNC = new TS_ThreadSyncLst();
 
-    public static void initialize(TS_ThreadSafeTrigger killTrigger) {
+    public static void initialize(TS_ThreadSyncTrigger killTrigger) {
         TS_SURLExecutorList.add(new TS_CaptchaSUEMemRefresh());
         TS_ThreadAsyncScheduled.everyMinutes(killTrigger, false, 10, kt -> {
             SYNC.removeAll(item -> item.time.hasSmaller(TGS_Time.ofMinutesAgo(10)));

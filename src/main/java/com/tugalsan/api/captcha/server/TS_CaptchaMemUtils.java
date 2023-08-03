@@ -5,7 +5,7 @@ import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.network.server.TS_NetworkIPUtils;
 import com.tugalsan.api.servlet.url.server.TS_SURLExecutorList;
 import com.tugalsan.api.thread.server.safe.TS_ThreadSafeTrigger;
-import com.tugalsan.api.thread.server.async.TS_ThreadAsync;
+import com.tugalsan.api.thread.server.async.TS_ThreadAsyncScheduled;
 import com.tugalsan.api.thread.server.safe.TS_ThreadSafeLst;
 import com.tugalsan.api.time.client.TGS_Time;
 import com.tugalsan.api.url.server.TS_UrlServletRequestUtils;
@@ -19,7 +19,7 @@ public class TS_CaptchaMemUtils {
 
     public static void initialize(TS_ThreadSafeTrigger killTrigger) {
         TS_SURLExecutorList.add(new TS_CaptchaSUEMemRefresh());
-        TS_ThreadAsync.everyMinutes(killTrigger, false, 10, kt -> {
+        TS_ThreadAsyncScheduled.everyMinutes(killTrigger, false, 10, kt -> {
             SYNC.removeAll(item -> item.time.hasSmaller(TGS_Time.ofMinutesAgo(10)));
             d.ci("initialize", "cleanUp.done");
         });

@@ -1,7 +1,6 @@
 package com.tugalsan.api.captcha.server;
 
 import com.tugalsan.api.captcha.client.TGS_CaptchaUtils;
-import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.servlet.url.server.TS_SURLExecutor;
 import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler;
 import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler02ForFilePng;
@@ -21,15 +20,15 @@ public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
 
     @Override
     public void run(HttpServlet servlet, HttpServletRequest rq, HttpServletResponse rs) {
-        TS_SURLHandler.of(servlet, rq, rs).permitNoCache().png(png -> {
+        TS_SURLHandler.of(servlet, rq, rs).permitNoCache().img("png", img -> {
             var captcha = new TS_Captcha.Builder().buildPreffered(
-                    png.getParameterInteger("bg", false),
-                    png.getParameterInteger("gimp", false),
-                    png.getParameterInteger("border", false),
-                    png.getParameterInteger("txt", false),
-                    png.getParameterInteger("word", false),
-                    png.getParameterInteger("noise", false),
-                    onlyNumbers == null ? false : onlyNumbers.validate(png)
+                    img.getParameterInteger("bg", false),
+                    img.getParameterInteger("gimp", false),
+                    img.getParameterInteger("border", false),
+                    img.getParameterInteger("txt", false),
+                    img.getParameterInteger("word", false),
+                    img.getParameterInteger("noise", false),
+                    onlyNumbers == null ? false : onlyNumbers.validate(img)
             );
             TS_CaptchaMemUtils.setServer(rq, captcha.getAnswer());
             return captcha.getImage();

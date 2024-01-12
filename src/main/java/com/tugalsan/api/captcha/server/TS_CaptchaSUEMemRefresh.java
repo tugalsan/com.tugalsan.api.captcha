@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
 
-    final private static TS_Log d = TS_Log.of(TS_CaptchaSUEMemRefresh.class);
+//    final private static TS_Log d = TS_Log.of(TS_CaptchaSUEMemRefresh.class);
 
     @Override
     public String name() {
@@ -21,18 +21,19 @@ public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
 
     @Override
     public void run(HttpServlet servlet, HttpServletRequest rq, HttpServletResponse rs) {
-        var png = TS_SURLHandler.of(servlet, rq, rs).permitNoCache().png();
-        var c = new TS_Captcha.Builder().buildPreffered(
-                png.getParameterInteger("bg", false),
-                png.getParameterInteger("gimp", false),
-                png.getParameterInteger("border", false),
-                png.getParameterInteger("txt", false),
-                png.getParameterInteger("word", false),
-                png.getParameterInteger("noise", false),
-                onlyNumbers == null ? false : onlyNumbers.validate(png)
-        );
-        TS_CaptchaMemUtils.setServer(rq, c.getAnswer());
-        png.transferPng(c.getImage());
+        TS_SURLHandler.of(servlet, rq, rs).permitNoCache().png(png -> {
+            var captcha = new TS_Captcha.Builder().buildPreffered(
+                    png.getParameterInteger("bg", false),
+                    png.getParameterInteger("gimp", false),
+                    png.getParameterInteger("border", false),
+                    png.getParameterInteger("txt", false),
+                    png.getParameterInteger("word", false),
+                    png.getParameterInteger("noise", false),
+                    onlyNumbers == null ? false : onlyNumbers.validate(png)
+            );
+            TS_CaptchaMemUtils.setServer(rq, captcha.getAnswer());
+            return captcha.getImage();
+        });
     }
 
     public static TGS_ValidatorType1<TS_SURLHandler02ForFilePng> onlyNumbers;

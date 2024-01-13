@@ -3,7 +3,7 @@ package com.tugalsan.api.captcha.server;
 import com.tugalsan.api.captcha.client.TGS_CaptchaUtils;
 import com.tugalsan.api.servlet.url.server.TS_SURLExecutor;
 import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler;
-import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler02ForFilePng;
+import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler02ForFileImg;
 import com.tugalsan.api.validator.client.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,5 +35,5 @@ public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
         });
     }
 
-    public static TGS_ValidatorType1<TS_SURLHandler02ForFilePng> onlyNumbers;
+    public static TGS_ValidatorType1<TS_SURLHandler02ForFileImg> onlyNumbers;
 }

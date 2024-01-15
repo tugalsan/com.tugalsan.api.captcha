@@ -12,15 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
 
 //    final private static TS_Log d = TS_Log.of(TS_CaptchaSUEMemRefresh.class);
-
     @Override
     public String name() {
         return TGS_CaptchaUtils.SERVLET_REFRESH();
     }
 
     @Override
-    public void run(HttpServlet servlet, HttpServletRequest rq, HttpServletResponse rs) {
-        TS_SURLHandler.of(servlet, rq, rs).permitNoCache().img("png", img -> {
+     public void run(TS_SURLHandler servletUrlHandler) {
+        servletUrlHandler.img("png", img -> {
             var captcha = new TS_Captcha.Builder().buildPreffered(
                     img.getParameterInteger("bg", false),
                     img.getParameterInteger("gimp", false),
@@ -30,7 +29,7 @@ public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
                     img.getParameterInteger("noise", false),
                     onlyNumbers == null ? false : onlyNumbers.validate(img)
             );
-            TS_CaptchaMemUtils.setServer(rq, captcha.getAnswer());
+            TS_CaptchaMemUtils.setServer(servletUrlHandler.rq, captcha.getAnswer());
             return captcha.getImage();
         });
     }

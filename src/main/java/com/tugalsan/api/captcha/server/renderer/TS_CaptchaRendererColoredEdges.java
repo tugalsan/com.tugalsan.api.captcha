@@ -61,6 +61,7 @@ public class TS_CaptchaRendererColoredEdges implements TS_CaptchaRenderer {
         _strokeWidth = strokeWidth < 0 ? DEFAULT_STROKE_WIDTH() : strokeWidth;
     }
 
+    @Override
     public void render(final String word, BufferedImage image) {
         var g = image.createGraphics();
 

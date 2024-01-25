@@ -1,13 +1,12 @@
 package com.tugalsan.api.captcha.client;
 
 import com.google.gwt.user.client.ui.Image;
-import com.tugalsan.api.log.client.TGC_Log;
 import com.tugalsan.api.servlet.url.client.TGS_SURLUtils;
 import com.tugalsan.api.url.client.builder.TGS_UrlBuilderUtils;
 
 public class TGC_CaptchaUtils {
 
-    final private static TGC_Log d = TGC_Log.of(TGC_CaptchaUtils.class);
+//    final private static TGC_Log d = TGC_Log.of(TGC_CaptchaUtils.class);
 
     public static String newUrl(CharSequence domain, Integer port, CharSequence spi) {
         var newUrlCaptcha = TGS_UrlBuilderUtils.https()

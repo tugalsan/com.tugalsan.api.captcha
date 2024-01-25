@@ -47,10 +47,10 @@ public class TS_CaptchaTextDefault implements TS_CaptchaText {
 
     @Override
     public String getText() {
-        int car = _srcChars.length - 1;
+        var car = _srcChars.length - 1;
 
-        String capText = "";
-        for (int i = 0; i < _length; i++) {
+        var capText = "";
+        for (var i = 0; i < _length; i++) {
             capText += _srcChars[_gen().nextInt(car) + 1];
         }
 
@@ -58,7 +58,7 @@ public class TS_CaptchaTextDefault implements TS_CaptchaText {
     }
 
     public static char[] copyOf(char[] original, int newLength) {
-        char[] copy = new char[newLength];
+        var copy = new char[newLength];
         System.arraycopy(original, 0, copy, 0,
                 Math.min(original.length, newLength));
         return copy;

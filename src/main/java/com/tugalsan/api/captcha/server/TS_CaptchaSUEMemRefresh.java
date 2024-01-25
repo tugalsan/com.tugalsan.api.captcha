@@ -5,9 +5,6 @@ import com.tugalsan.api.servlet.url.server.TS_SURLExecutor;
 import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler;
 import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler02ForFileImg;
 import com.tugalsan.api.validator.client.*;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
 

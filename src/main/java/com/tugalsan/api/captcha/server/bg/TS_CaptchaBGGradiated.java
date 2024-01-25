@@ -2,7 +2,6 @@ package com.tugalsan.api.captcha.server.bg;
 
 import java.awt.Color;
 import java.awt.GradientPaint;
-import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -20,20 +19,21 @@ public class TS_CaptchaBGGradiated implements TS_CaptchaBG {
     private Color _fromColor = Color.DARK_GRAY;
     private Color _toColor = Color.WHITE;
     
+    @Override
     public BufferedImage getBackground(int width, int height) {
         // create an opaque image
-        BufferedImage img = new BufferedImage(width, height,
+        var img = new BufferedImage(width, height,
                 BufferedImage.TYPE_INT_RGB);
 
-        Graphics2D g = img.createGraphics();
-        RenderingHints hints = new RenderingHints(
+        var g = img.createGraphics();
+        var hints = new RenderingHints(
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         g.setRenderingHints(hints);
 
         // create the gradient color
-        GradientPaint ytow = new GradientPaint(0, 0, _fromColor, width, height,
+        var ytow = new GradientPaint(0, 0, _fromColor, width, height,
                 _toColor);
 
         g.setPaint(ytow);
@@ -47,9 +47,10 @@ public class TS_CaptchaBGGradiated implements TS_CaptchaBG {
         return img;
     }
 
+    @Override
     public BufferedImage addBackground(BufferedImage image) {
-        int width = image.getWidth();
-        int height = image.getHeight();
+        var width = image.getWidth();
+        var height = image.getHeight();
         
         return getBackground(width, height);
     }

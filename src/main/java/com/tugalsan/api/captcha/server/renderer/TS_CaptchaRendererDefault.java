@@ -45,6 +45,7 @@ public class TS_CaptchaRendererDefault implements TS_CaptchaRenderer {
      * @param word The word to be rendered.
      * @param image The BufferedImage onto which the word will be painted on to
      */
+    @Override
     public void render(String word, BufferedImage image) {
         var g = image.createGraphics();
 

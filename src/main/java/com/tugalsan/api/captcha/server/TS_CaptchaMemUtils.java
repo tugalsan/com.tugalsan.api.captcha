@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 public class TS_CaptchaMemUtils {
 
     final private static TS_Log d = TS_Log.of(TS_CaptchaMemUtils.class);
-    final private static TS_ThreadSyncLst<TS_CaptchaMemItem> SYNC = new TS_ThreadSyncLst();
+    final private static TS_ThreadSyncLst<TS_CaptchaMemItem> SYNC = TS_ThreadSyncLst.of();
 
     public static void initialize(TS_ThreadSyncTrigger killTrigger) {
         TS_SURLExecutorList.add(new TS_CaptchaSUEMemRefresh());

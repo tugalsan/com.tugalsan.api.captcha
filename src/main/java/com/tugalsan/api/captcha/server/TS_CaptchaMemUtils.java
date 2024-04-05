@@ -8,6 +8,7 @@ import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
 import com.tugalsan.api.thread.server.async.TS_ThreadAsyncScheduled;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
 import com.tugalsan.api.time.client.TGS_Time;
+import com.tugalsan.api.union.client.TGS_Union;
 import com.tugalsan.api.url.server.TS_UrlServletRequestUtils;
 import java.time.Duration;
 import java.util.Objects;
@@ -27,12 +28,18 @@ public class TS_CaptchaMemUtils {
     }
 
     public static boolean validate(HttpServletRequest rq) {
-        var captchaServer = getServer(rq);
-        if (captchaServer == null) {
-            d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "server==null");
+        var u_captchaServer = getServer(rq);
+        if (u_captchaServer.isEmpty()) {
+            d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "u_captchaServer.isEmpty()", u_captchaServer.throwable().getMessage());
             return false;
         }
-        var captchaClient = getClient(rq);
+        var captchaServer = u_captchaServer.value();
+        var u_captchaClient = getClient(rq);
+        if (u_captchaClient.isEmpty()) {
+            d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "u_captchaClient.isEmpty()", u_captchaClient.throwable().getMessage());
+            return false;
+        }
+        var captchaClient = u_captchaClient.value();
         if (captchaClient.guess == null) {
             d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "captchaClient.guess==null");
             return false;
@@ -50,30 +57,47 @@ public class TS_CaptchaMemUtils {
         return result;
     }
 
-    public static TS_CaptchaClientValues getClient(HttpServletRequest rq) {
-        var clientIp = TS_NetworkIPUtils.getIPClient(rq);
+    public static TGS_Union<TS_CaptchaClientValues> getClient(HttpServletRequest rq) {
+        var u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
+        if (u_clientIp.isEmpty()) {
+            return TGS_Union.ofThrowable(u_clientIp.throwable());
+        }
+        var clientIp = u_clientIp.value();
         var guess = TS_UrlServletRequestUtils.getParameterValueFrom64(rq, TGS_CaptchaUtils.PARAM_ANSWER());
-        return new TS_CaptchaClientValues(clientIp, guess);
+        return TGS_Union.of(new TS_CaptchaClientValues(clientIp, guess));
     }
 
-    public static void delServer(HttpServletRequest rq) {
-        delServer(TS_NetworkIPUtils.getIPClient(rq));
+    public static TGS_Union<Boolean> delServer(HttpServletRequest rq) {
+        var u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
+        if (u_clientIp.isEmpty()) {
+            return TGS_Union.ofThrowable(u_clientIp.throwable());
+        }
+        return TGS_Union.of(delServer(u_clientIp.value()));
     }
 
-    public static void delServer(CharSequence clientIp) {
-        SYNC.removeFirst(item -> Objects.equals(item.clientIp, clientIp));
+    public static boolean delServer(CharSequence clientIp) {
+        return SYNC.removeFirst(item -> Objects.equals(item.clientIp, clientIp));
     }
 
-    public static TS_CaptchaMemItem getServer(HttpServletRequest rq) {
-        return getServer(TS_NetworkIPUtils.getIPClient(rq));
+    public static TGS_Union<TS_CaptchaMemItem> getServer(HttpServletRequest rq) {
+        var u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
+        if (u_clientIp.isEmpty()) {
+            return TGS_Union.ofThrowable(u_clientIp.throwable());
+        }
+        return TGS_Union.of(getServer(u_clientIp.value()));
     }
 
     public static TS_CaptchaMemItem getServer(CharSequence clientIp) {
         return SYNC.findFirst(item -> Objects.equals(item.clientIp, clientIp));
     }
 
-    public static void setServer(HttpServletRequest rq, CharSequence answer) {
-        setServer(TS_NetworkIPUtils.getIPClient(rq), answer);
+    public static TGS_Union<Boolean> setServer(HttpServletRequest rq, CharSequence answer) {
+        var u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
+        if (u_clientIp.isEmpty()) {
+            return TGS_Union.ofThrowable(u_clientIp.throwable());
+        }
+        setServer(u_clientIp.value(), answer);
+        return TGS_Union.of(true);
     }
 
     public static void setServer(CharSequence clientIp, CharSequence answer) {

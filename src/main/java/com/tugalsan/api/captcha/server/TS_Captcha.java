@@ -12,7 +12,6 @@ import com.tugalsan.api.captcha.server.bg.*;
 import com.tugalsan.api.captcha.server.gimpy.*;
 import com.tugalsan.api.captcha.server.noise.*;
 import com.tugalsan.api.captcha.server.text.*;
-import com.tugalsan.api.union.client.TGS_UnionUtils;
 
 public final class TS_Captcha implements Serializable {
 
@@ -262,23 +261,14 @@ public final class TS_Captcha implements Serializable {
             return new TS_Captcha(this);
         }
 
-        private void writeObject(ObjectOutputStream out) {
-            try {
-                out.writeObject(_answer);
-                ImageIO.write(_img, "png", ImageIO.createImageOutputStream(out));
-            } catch (IOException e) {
-                TGS_UnionUtils.throwAsRuntimeException(e);
-            }
+        private void writeObject(ObjectOutputStream out) throws IOException {
+            out.writeObject(_answer);
+            ImageIO.write(_img, "png", ImageIO.createImageOutputStream(out));
         }
 
-        private void readObject(ObjectInputStream in) {
-            try {
-                _answer = (String) in.readObject();
-                _img = ImageIO.read(ImageIO.createImageInputStream(in));
-            } catch (IOException | ClassNotFoundException e) {
-                TGS_UnionUtils.throwAsRuntimeException(e);
-
-            }
+        private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+            _answer = (String) in.readObject();
+            _img = ImageIO.read(ImageIO.createImageInputStream(in));
         }
     }
 

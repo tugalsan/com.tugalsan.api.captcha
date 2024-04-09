@@ -30,13 +30,13 @@ public class TS_CaptchaMemUtils {
     public static boolean validate(HttpServletRequest rq) {
         var u_captchaServer = getServer(rq);
         if (u_captchaServer.isEmpty()) {
-            d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "u_captchaServer.isEmpty()", u_captchaServer.throwable().getMessage());
+            d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "u_captchaServer.isEmpty()", u_captchaServer.excuse().getMessage());
             return false;
         }
         var captchaServer = u_captchaServer.value();
         var u_captchaClient = getClient(rq);
         if (u_captchaClient.isEmpty()) {
-            d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "u_captchaClient.isEmpty()", u_captchaClient.throwable().getMessage());
+            d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "u_captchaClient.isEmpty()", u_captchaClient.excuse().getMessage());
             return false;
         }
         var captchaClient = u_captchaClient.value();
@@ -60,7 +60,7 @@ public class TS_CaptchaMemUtils {
     public static TGS_Union<TS_CaptchaClientValues> getClient(HttpServletRequest rq) {
         var u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
         if (u_clientIp.isEmpty()) {
-            return TGS_Union.ofThrowable(u_clientIp.throwable());
+            return TGS_Union.ofExcuse(u_clientIp.excuse());
         }
         var clientIp = u_clientIp.value();
         var guess = TS_UrlServletRequestUtils.getParameterValueFrom64(rq, TGS_CaptchaUtils.PARAM_ANSWER());
@@ -70,7 +70,7 @@ public class TS_CaptchaMemUtils {
     public static TGS_Union<Boolean> delServer(HttpServletRequest rq) {
         var u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
         if (u_clientIp.isEmpty()) {
-            return TGS_Union.ofThrowable(u_clientIp.throwable());
+            return TGS_Union.ofExcuse(u_clientIp.excuse());
         }
         return TGS_Union.of(delServer(u_clientIp.value()));
     }
@@ -82,7 +82,7 @@ public class TS_CaptchaMemUtils {
     public static TGS_Union<TS_CaptchaMemItem> getServer(HttpServletRequest rq) {
         var u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
         if (u_clientIp.isEmpty()) {
-            return TGS_Union.ofThrowable(u_clientIp.throwable());
+            return TGS_Union.ofExcuse(u_clientIp.excuse());
         }
         return TGS_Union.of(getServer(u_clientIp.value()));
     }
@@ -94,7 +94,7 @@ public class TS_CaptchaMemUtils {
     public static TGS_Union<Boolean> setServer(HttpServletRequest rq, CharSequence answer) {
         var u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
         if (u_clientIp.isEmpty()) {
-            return TGS_Union.ofThrowable(u_clientIp.throwable());
+            return TGS_Union.ofExcuse(u_clientIp.excuse());
         }
         setServer(u_clientIp.value(), answer);
         return TGS_Union.of(true);

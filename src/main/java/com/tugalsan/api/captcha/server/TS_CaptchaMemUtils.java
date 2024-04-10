@@ -61,7 +61,7 @@ public class TS_CaptchaMemUtils {
     public static TGS_Union<TS_CaptchaClientValues> getClient(HttpServletRequest rq) {
         var u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
         if (u_clientIp.isEmpty()) {
-            return TGS_Union.ofExcuse(u_clientIp.excuse());
+            return u_clientIp.toExcuse();
         }
         var clientIp = u_clientIp.value();
         var guess = TS_UrlServletRequestUtils.getParameterValueFrom64(rq, TGS_CaptchaUtils.PARAM_ANSWER());
@@ -85,8 +85,8 @@ public class TS_CaptchaMemUtils {
 
     public static TGS_Union<TS_CaptchaMemItem> getServer(HttpServletRequest rq) {
         var u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
-        if (u_clientIp.isEmpty()) {
-            return TGS_Union.ofExcuse(u_clientIp.excuse());
+        if (u_clientIp.isExcuse()) {
+            return u_clientIp.toExcuse();
         }
         return TGS_Union.of(getServer(u_clientIp.value()));
     }

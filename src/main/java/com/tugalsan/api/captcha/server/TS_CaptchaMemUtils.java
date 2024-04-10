@@ -9,6 +9,7 @@ import com.tugalsan.api.thread.server.async.TS_ThreadAsyncScheduled;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
 import com.tugalsan.api.time.client.TGS_Time;
 import com.tugalsan.api.union.client.TGS_Union;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
 import com.tugalsan.api.url.server.TS_UrlServletRequestUtils;
 import java.time.Duration;
 import java.util.Objects;
@@ -67,12 +68,15 @@ public class TS_CaptchaMemUtils {
         return TGS_Union.of(new TS_CaptchaClientValues(clientIp, guess));
     }
 
-    public static TGS_Union<Boolean> delServer(HttpServletRequest rq) {
+    public static TGS_UnionExcuse delServer(HttpServletRequest rq) {
         var u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
-        if (u_clientIp.isEmpty()) {
-            return TGS_Union.ofExcuse(u_clientIp.excuse());
+        if (u_clientIp.isExcuse()) {
+            return TGS_UnionExcuse.ofExcuse(u_clientIp.excuse());
         }
-        return TGS_Union.of(delServer(u_clientIp.value()));
+        if (!delServer(u_clientIp.value())) {
+            return TGS_UnionExcuse.ofExcuse(d.className, "delServer", "Cannot find the item to delete");
+        }
+        return TGS_UnionExcuse.ofVoid();
     }
 
     public static boolean delServer(CharSequence clientIp) {
@@ -91,13 +95,13 @@ public class TS_CaptchaMemUtils {
         return SYNC.findFirst(item -> Objects.equals(item.clientIp, clientIp));
     }
 
-    public static TGS_Union<Boolean> setServer(HttpServletRequest rq, CharSequence answer) {
+    public static TGS_UnionExcuse setServer(HttpServletRequest rq, CharSequence answer) {
         var u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
-        if (u_clientIp.isEmpty()) {
-            return TGS_Union.ofExcuse(u_clientIp.excuse());
+        if (u_clientIp.isExcuse()) {
+            return TGS_UnionExcuse.ofExcuse(u_clientIp.excuse());
         }
         setServer(u_clientIp.value(), answer);
-        return TGS_Union.of(true);
+        return TGS_UnionExcuse.ofVoid();
     }
 
     public static void setServer(CharSequence clientIp, CharSequence answer) {

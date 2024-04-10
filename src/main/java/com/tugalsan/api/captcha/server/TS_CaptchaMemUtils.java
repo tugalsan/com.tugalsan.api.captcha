@@ -8,8 +8,8 @@ import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
 import com.tugalsan.api.thread.server.async.TS_ThreadAsyncScheduled;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
 import com.tugalsan.api.time.client.TGS_Time;
-import com.tugalsan.api.union.client.TGS_Union;
 import com.tugalsan.api.union.client.TGS_UnionExcuse;
+import com.tugalsan.api.union.client.TGS_UnionExcuseVoid;
 import com.tugalsan.api.url.server.TS_UrlServletRequestUtils;
 import java.time.Duration;
 import java.util.Objects;
@@ -58,50 +58,50 @@ public class TS_CaptchaMemUtils {
         return result;
     }
 
-    public static TGS_Union<TS_CaptchaClientValues> getClient(HttpServletRequest rq) {
+    public static TGS_UnionExcuse<TS_CaptchaClientValues> getClient(HttpServletRequest rq) {
         var u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
         if (u_clientIp.isEmpty()) {
             return u_clientIp.toExcuse();
         }
         var clientIp = u_clientIp.value();
         var guess = TS_UrlServletRequestUtils.getParameterValueFrom64(rq, TGS_CaptchaUtils.PARAM_ANSWER());
-        return TGS_Union.of(new TS_CaptchaClientValues(clientIp, guess));
+        return TGS_UnionExcuse.of(new TS_CaptchaClientValues(clientIp, guess));
     }
 
-    public static TGS_UnionExcuse delServer(HttpServletRequest rq) {
+    public static TGS_UnionExcuseVoid delServer(HttpServletRequest rq) {
         var u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
         if (u_clientIp.isExcuse()) {
-            return TGS_UnionExcuse.ofExcuse(u_clientIp.excuse());
+            return TGS_UnionExcuseVoid.ofExcuse(u_clientIp.excuse());
         }
         if (!delServer(u_clientIp.value())) {
-            return TGS_UnionExcuse.ofExcuse(d.className, "delServer", "Cannot find the item to delete");
+            return TGS_UnionExcuseVoid.ofExcuse(d.className, "delServer", "Cannot find the item to delete");
         }
-        return TGS_UnionExcuse.ofVoid();
+        return TGS_UnionExcuseVoid.ofVoid();
     }
 
     public static boolean delServer(CharSequence clientIp) {
         return SYNC.removeFirst(item -> Objects.equals(item.clientIp, clientIp));
     }
 
-    public static TGS_Union<TS_CaptchaMemItem> getServer(HttpServletRequest rq) {
+    public static TGS_UnionExcuse<TS_CaptchaMemItem> getServer(HttpServletRequest rq) {
         var u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
         if (u_clientIp.isExcuse()) {
             return u_clientIp.toExcuse();
         }
-        return TGS_Union.of(getServer(u_clientIp.value()));
+        return TGS_UnionExcuse.of(getServer(u_clientIp.value()));
     }
 
     public static TS_CaptchaMemItem getServer(CharSequence clientIp) {
         return SYNC.findFirst(item -> Objects.equals(item.clientIp, clientIp));
     }
 
-    public static TGS_UnionExcuse setServer(HttpServletRequest rq, CharSequence answer) {
+    public static TGS_UnionExcuseVoid setServer(HttpServletRequest rq, CharSequence answer) {
         var u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
         if (u_clientIp.isExcuse()) {
-            return TGS_UnionExcuse.ofExcuse(u_clientIp.excuse());
+            return TGS_UnionExcuseVoid.ofExcuse(u_clientIp.excuse());
         }
         setServer(u_clientIp.value(), answer);
-        return TGS_UnionExcuse.ofVoid();
+        return TGS_UnionExcuseVoid.ofVoid();
     }
 
     public static void setServer(CharSequence clientIp, CharSequence answer) {

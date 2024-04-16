@@ -28,45 +28,44 @@ public class TS_CaptchaMemUtils {
         });
     }
 
-    public static TGS_UnionExcuseVoid validate(HttpServletRequest rq) {
+    public static boolean validate(HttpServletRequest rq) {
         var u_captchaServer = getServer(rq);
-        if (u_captchaServer.isExcuse()) {
-            return TGS_UnionExcuseVoid.ofExcuse(d.className, "validate", u_captchaServer.excuse().getMessage());
+        if (u_captchaServer.isEmpty()) {
+            d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "u_captchaServer.isEmpty()", u_captchaServer.excuse().getMessage());
+            return false;
         }
         var captchaServer = u_captchaServer.value();
         var u_captchaClient = getClient(rq);
-        if (u_captchaClient.isExcuse()) {
-            return TGS_UnionExcuseVoid.ofExcuse(d.className, "validate", u_captchaClient.excuse().getMessage());
+        if (u_captchaClient.isEmpty()) {
+            d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "u_captchaClient.isEmpty()", u_captchaClient.excuse().getMessage());
+            return false;
         }
         var captchaClient = u_captchaClient.value();
         if (captchaClient.guess == null) {
-            return TGS_UnionExcuseVoid.ofExcuse(d.className, "validate", "captchaClient.guess == null");
+            d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "captchaClient.guess==null");
+            return false;
         }
         var result = captchaClient.guess.toString().compareToIgnoreCase(//NO TURKISH CHECK NEEDED
                 String.valueOf(captchaServer.answer)
         ) == 0;
         if (!result) {
-            delServer(rq);
             d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA",
                     "client", captchaClient.clientIp, captchaClient.guess,
                     "server", captchaServer.clientIp, captchaServer.answer, captchaServer.time
             );
-            return TGS_UnionExcuseVoid.ofExcuse(d.className, "validate", "!result");
+            delServer(rq);
         }
-        return TGS_UnionExcuseVoid.ofVoid();
+        return result;
     }
 
     public static TGS_UnionExcuse<TS_CaptchaClientValues> getClient(HttpServletRequest rq) {
         var u_clientIp = TS_NetworkIPUtils.getIPClient(rq);
-        if (u_clientIp.isExcuse()) {
+        if (u_clientIp.isEmpty()) {
             return u_clientIp.toExcuse();
         }
         var clientIp = u_clientIp.value();
-        var u_guess = TS_UrlServletRequestUtils.getParameterValueFrom64(rq, TGS_CaptchaUtils.PARAM_ANSWER());
-        if (u_guess.isExcuse()) {
-            return u_guess.toExcuse();
-        }
-        return TGS_UnionExcuse.of(new TS_CaptchaClientValues(clientIp, u_guess.value()));
+        var guess = TS_UrlServletRequestUtils.getParameterValueFrom64(rq, TGS_CaptchaUtils.PARAM_ANSWER());
+        return TGS_UnionExcuse.of(new TS_CaptchaClientValues(clientIp, guess));
     }
 
     public static TGS_UnionExcuseVoid delServer(HttpServletRequest rq) {

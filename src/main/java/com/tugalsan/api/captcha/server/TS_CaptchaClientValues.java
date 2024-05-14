@@ -1,11 +1,7 @@
 package com.tugalsan.api.captcha.server;
 
-public class TS_CaptchaClientValues {
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
 
-    public TS_CaptchaClientValues(CharSequence clientIp, CharSequence guess) {
-        this.clientIp = clientIp;
-        this.guess = guess;
-    }
-    public CharSequence clientIp;
-    public CharSequence guess;
+public record TS_CaptchaClientValues(TGS_UnionExcuse<String> clientIp, CharSequence guess) {
+
 }

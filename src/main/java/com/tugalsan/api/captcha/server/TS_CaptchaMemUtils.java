@@ -8,6 +8,8 @@ import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
 import com.tugalsan.api.thread.server.async.TS_ThreadAsyncScheduled;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
 import com.tugalsan.api.time.client.TGS_Time;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
+import com.tugalsan.api.union.client.TGS_UnionExcuseVoid;
 import com.tugalsan.api.url.server.TS_UrlServletRequestUtils;
 import java.time.Duration;
 import java.util.Objects;
@@ -26,28 +28,30 @@ public class TS_CaptchaMemUtils {
         });
     }
 
-    public static boolean validate(HttpServletRequest rq) {
-        var captchaServer = getServer(rq);
-        if (captchaServer == null) {
+    public static TGS_UnionExcuseVoid validate(HttpServletRequest rq) {
+        var u = getServer(rq);
+        if (u .isExcuse()) {
             d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "server==null");
-            return false;
+            return u.toExcuseVoid();
         }
+        var captchaServer = u.value();
         var captchaClient = getClient(rq);
-        if (captchaClient.guess == null) {
+        if (captchaClient.guess() == null) {
             d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "captchaClient.guess==null");
-            return false;
+            return TGS_UnionExcuseVoid.ofExcuse(d.className, "validate", "captchaClient.guess() == null");
         }
-        var result = captchaClient.guess.toString().compareToIgnoreCase(//NO TURKISH CHECK NEEDED
+        var result = captchaClient.guess().toString().compareToIgnoreCase(//NO TURKISH CHECK NEEDED
                 String.valueOf(captchaServer.answer)
         ) == 0;
         if (!result) {
             d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA",
-                    "client", captchaClient.clientIp, captchaClient.guess,
+                    "client", captchaClient.clientIp(), captchaClient.guess(),
                     "server", captchaServer.clientIp, captchaServer.answer, captchaServer.time
             );
             delServer(rq);
+            return TGS_UnionExcuseVoid.ofExcuse(d.className, "validate", "wrong captcha");
         }
-        return result;
+        return TGS_UnionExcuseVoid.ofVoid();
     }
 
     public static TS_CaptchaClientValues getClient(HttpServletRequest rq) {
@@ -56,34 +60,54 @@ public class TS_CaptchaMemUtils {
         return new TS_CaptchaClientValues(clientIp, guess);
     }
 
-    public static void delServer(HttpServletRequest rq) {
-        delServer(TS_NetworkIPUtils.getIPClient(rq));
+    public static TGS_UnionExcuseVoid delServer(HttpServletRequest rq) {
+        var u = TS_NetworkIPUtils.getIPClient(rq);
+        if (u.isExcuse()) {
+            return u.toExcuseVoid();
+        }
+        delServer(u.value());
+         return TGS_UnionExcuseVoid.ofVoid();
     }
 
     public static void delServer(CharSequence clientIp) {
         SYNC.removeFirst(item -> Objects.equals(item.clientIp, clientIp));
     }
 
-    public static TS_CaptchaMemItem getServer(HttpServletRequest rq) {
-        return getServer(TS_NetworkIPUtils.getIPClient(rq));
+    public static TGS_UnionExcuse<TS_CaptchaMemItem> getServer(HttpServletRequest rq) {
+        var u = TS_NetworkIPUtils.getIPClient(rq);
+        if (u.isExcuse()) {
+            return u.toExcuse();
+        }
+        return getServer(u.value());
     }
 
-    public static TS_CaptchaMemItem getServer(CharSequence clientIp) {
-        return SYNC.findFirst(item -> Objects.equals(item.clientIp, clientIp));
+    public static TGS_UnionExcuse<TS_CaptchaMemItem> getServer(CharSequence clientIp) {
+        var val = SYNC.findFirst(item -> Objects.equals(item.clientIp, clientIp));
+        return val == null ? TGS_UnionExcuse.ofExcuse(d.className, "getServer", "not found")
+                : TGS_UnionExcuse.of(val);
     }
 
-    public static void setServer(HttpServletRequest rq, CharSequence answer) {
-        setServer(TS_NetworkIPUtils.getIPClient(rq), answer);
+    public static TGS_UnionExcuseVoid setServer(HttpServletRequest rq, CharSequence answer) {
+        var u = TS_NetworkIPUtils.getIPClient(rq);
+        if (u.isExcuse()) {
+            return u.toExcuseVoid();
+        }
+        return setServer(u.value(), answer);
     }
 
-    public static void setServer(CharSequence clientIp, CharSequence answer) {
+    public static TGS_UnionExcuseVoid setServer(CharSequence clientIp, CharSequence answer) {
         var now = TGS_Time.of();
-        var found = getServer(clientIp);
+        var u = getServer(clientIp);
+        if (u.isExcuse()){
+            return u.toExcuseVoid();
+        }
+        var found = u.value();
         if (found != null) {
             found.time = now;
             found.answer = answer;
-            return;
+            return TGS_UnionExcuseVoid.ofVoid();
         }
         SYNC.add(new TS_CaptchaMemItem(now, clientIp, answer));
+        return TGS_UnionExcuseVoid.ofVoid();
     }
 }

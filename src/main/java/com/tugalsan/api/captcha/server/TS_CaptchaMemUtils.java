@@ -30,8 +30,8 @@ public class TS_CaptchaMemUtils {
 
     public static TGS_UnionExcuseVoid validate(HttpServletRequest rq) {
         var u = getServer(rq);
-        if (u .isExcuse()) {
-            d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "server==null");
+        if (u.isExcuse()) {
+            d.ce(d.className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "server==null", u.excuse().getMessage());
             return u.toExcuseVoid();
         }
         var captchaServer = u.value();
@@ -66,7 +66,7 @@ public class TS_CaptchaMemUtils {
             return u.toExcuseVoid();
         }
         delServer(u.value());
-         return TGS_UnionExcuseVoid.ofVoid();
+        return TGS_UnionExcuseVoid.ofVoid();
     }
 
     public static void delServer(CharSequence clientIp) {
@@ -83,8 +83,17 @@ public class TS_CaptchaMemUtils {
 
     public static TGS_UnionExcuse<TS_CaptchaMemItem> getServer(CharSequence clientIp) {
         var val = SYNC.findFirst(item -> Objects.equals(item.clientIp, clientIp));
-        return val == null ? TGS_UnionExcuse.ofExcuse(d.className, "getServer", "not found")
-                : TGS_UnionExcuse.of(val);
+        if (val == null) {
+            if (SYNC.isEmpty()) {
+                d.ce("getServer", "list.empty");
+            } else {
+                SYNC.forEach(item -> {
+                    d.ce("getServer", "list.item", item);
+                });
+            }
+            return TGS_UnionExcuse.ofExcuse(d.className, "getServer", "clientIp not found:" + clientIp);
+        }
+        return TGS_UnionExcuse.of(val);
     }
 
     public static TGS_UnionExcuseVoid setServer(HttpServletRequest rq, CharSequence answer) {
@@ -98,16 +107,13 @@ public class TS_CaptchaMemUtils {
     public static TGS_UnionExcuseVoid setServer(CharSequence clientIp, CharSequence answer) {
         var now = TGS_Time.of();
         var u = getServer(clientIp);
-        if (u.isExcuse()){
-            return u.toExcuseVoid();
-        }
-        var found = u.value();
-        if (found != null) {
+        if (u.isExcuse()) {
+            SYNC.add(new TS_CaptchaMemItem(now, clientIp, answer));
+        } else {
+            var found = u.value();
             found.time = now;
             found.answer = answer;
-            return TGS_UnionExcuseVoid.ofVoid();
         }
-        SYNC.add(new TS_CaptchaMemItem(now, clientIp, answer));
         return TGS_UnionExcuseVoid.ofVoid();
     }
 }

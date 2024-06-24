@@ -12,7 +12,6 @@ module com.tugalsan.api.captcha {
     requires com.tugalsan.api.url;
     requires com.tugalsan.api.validator;
     requires com.tugalsan.api.random;
-    requires com.tugalsan.api.runnable;
     requires com.tugalsan.api.servlet.url;
     exports com.tugalsan.api.captcha.client;
     exports com.tugalsan.api.captcha.server;

@@ -1,10 +1,10 @@
 package com.tugalsan.api.captcha.server;
 
+import com.tugalsan.api.callable.client.TGS_CallableType1_Validate;
 import com.tugalsan.api.captcha.client.TGS_CaptchaUtils;
 import com.tugalsan.api.servlet.url.server.TS_SURLExecutor;
 import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler;
 import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler02ForFileImg;
-import com.tugalsan.api.validator.client.*;
 
 public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
 
@@ -31,5 +31,5 @@ public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
         });
     }
 
-    public static TGS_ValidatorType1<TS_SURLHandler02ForFileImg> onlyNumbers;
+    public static TGS_CallableType1_Validate<TS_SURLHandler02ForFileImg> onlyNumbers;
 }

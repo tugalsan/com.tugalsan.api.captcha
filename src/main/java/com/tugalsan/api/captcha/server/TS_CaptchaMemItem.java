@@ -12,4 +12,11 @@ public class TS_CaptchaMemItem {
     public TGS_Time time;
     public CharSequence clientIp;
     public CharSequence answer;
+
+    @Override
+    public String toString() {
+        return TS_CaptchaMemItem.class.getSimpleName() + "{" + "time=" + time + ", clientIp=" + clientIp + ", answer=" + answer + '}';
+    }
+    
+    
 }

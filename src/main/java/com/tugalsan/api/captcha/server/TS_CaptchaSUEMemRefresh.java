@@ -15,8 +15,8 @@ public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
     }
 
     @Override
-     public void run(TS_SURLHandler servletUrlHandler) {
-        servletUrlHandler.img("png", img -> {
+     public void run(TS_SURLHandler suh) {
+        suh.img("png", img -> {
             var captcha = new TS_Captcha.Builder().buildPreffered(
                     img.getParameterInteger("bg", false),
                     img.getParameterInteger("gimp", false),
@@ -26,7 +26,7 @@ public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
                     img.getParameterInteger("noise", false),
                     onlyNumbers == null ? false : onlyNumbers.validate(img)
             );
-            TS_CaptchaMemUtils.setServer(servletUrlHandler.rq, captcha.getAnswer());
+            TS_CaptchaMemUtils.setServer(suh.rq, captcha.getAnswer());
             return captcha.getImage();
         });
     }

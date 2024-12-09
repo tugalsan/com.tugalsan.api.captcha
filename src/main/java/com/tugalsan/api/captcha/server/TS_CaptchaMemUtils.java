@@ -70,7 +70,7 @@ public class TS_CaptchaMemUtils {
     }
 
     public static void delServer(CharSequence clientIp) {
-        SYNC.removeFirst(item -> Objects.equals(item.clientIp, clientIp));
+        SYNC.removeAndPopFirst(item -> Objects.equals(item.clientIp, clientIp));
     }
 
     public static TGS_UnionExcuse<TS_CaptchaMemItem> getServer(HttpServletRequest rq) {

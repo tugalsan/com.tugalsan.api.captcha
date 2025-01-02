@@ -33,7 +33,7 @@ public class TGC_CaptchaUtils {
     public static void update(Image imgCaptcha, CharSequence domain, Integer port, CharSequence spi) {
         imgCaptcha.setUrl(tmpUrl());
         var newUrl = newUrl(domain, port, spi);
-        TGC_ThreadUtils.run_everySeconds_afterGUIUpdate(kt -> {
+        TGC_ThreadUtils.run_afterSeconds_afterGUIUpdate(kt -> {
             imgCaptcha.setUrl(newUrl);
         }, 1);
     }

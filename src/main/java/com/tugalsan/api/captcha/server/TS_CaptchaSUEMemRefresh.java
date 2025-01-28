@@ -5,6 +5,7 @@ import com.tugalsan.api.captcha.client.TGS_CaptchaUtils;
 import com.tugalsan.api.servlet.url.server.TS_SURLExecutor;
 import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler;
 import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler02ForFileImg;
+import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
 
 public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
 
@@ -15,7 +16,7 @@ public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
     }
 
     @Override
-     public void run(TS_SURLHandler suh) {
+    public void run(TS_ThreadSyncTrigger servletKillThrigger, TS_SURLHandler suh) {
         suh.img("png", img -> {
             var captcha = new TS_Captcha.Builder().buildPreffered(
                     img.getParameterInteger("bg", false),

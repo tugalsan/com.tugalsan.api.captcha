@@ -12,7 +12,8 @@ import com.tugalsan.api.captcha.server.bg.*;
 import com.tugalsan.api.captcha.server.gimpy.*;
 import com.tugalsan.api.captcha.server.noise.*;
 import com.tugalsan.api.captcha.server.text.*;
-import com.tugalsan.api.unsafe.client.*;
+import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
+
 
 public final class TS_Captcha implements Serializable {
 
@@ -263,14 +264,14 @@ public final class TS_Captcha implements Serializable {
         }
 
         private void writeObject(ObjectOutputStream out) {
-            TGS_UnSafe.run(() -> {
+            TGS_FuncMTCEUtils.run(() -> {
                 out.writeObject(_answer);
                 ImageIO.write(_img, "png", ImageIO.createImageOutputStream(out));
             });
         }
 
         private void readObject(ObjectInputStream in) {
-            TGS_UnSafe.run(() -> {
+            TGS_FuncMTCEUtils.run(() -> {
                 _answer = (String) in.readObject();
                 _img = ImageIO.read(ImageIO.createImageInputStream(in));
             });

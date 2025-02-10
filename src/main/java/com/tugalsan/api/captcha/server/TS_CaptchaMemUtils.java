@@ -5,7 +5,7 @@ import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.network.server.TS_NetworkIPUtils;
 import com.tugalsan.api.servlet.url.server.TS_SURLExecutorList;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
-import com.tugalsan.api.thread.server.async.TS_ThreadAsyncScheduled;
+import com.tugalsan.api.thread.server.async.scheduled.TS_ThreadAsyncScheduled;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
 import com.tugalsan.api.time.client.TGS_Time;
 import com.tugalsan.api.union.client.TGS_UnionExcuse;

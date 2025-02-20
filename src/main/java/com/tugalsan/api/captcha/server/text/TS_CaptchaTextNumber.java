@@ -25,6 +25,6 @@ public class TS_CaptchaTextNumber implements TS_CaptchaText {
 
     @Override
     public String getText() {
-        return new StringBuffer(_txtProd.getText()).toString();
+        return new StringBuilder(_txtProd.getText()).toString();
     }
 }

@@ -22,15 +22,14 @@ public class TS_CaptchaGimpyShear implements TS_CaptchaGimpy {
     @Override
     public void gimp(BufferedImage bi) {
         var g = bi.createGraphics();
-        shearX(g, bi.getWidth(), bi.getHeight());
-        shearY(g, bi.getWidth(), bi.getHeight());
+        shearX(g, bi.getWidth(), bi.getHeight(), true);
+        shearY(g, bi.getWidth(), bi.getHeight(), true);
         g.dispose();
     }
 
-    private void shearX(Graphics2D g, int w1, int h1) {
+    private void shearX(Graphics2D g, int w1, int h1, boolean borderGap_defaulTrue) {
         var period = _gen.nextInt(10) + 5;
 
-        var borderGap = true;
         var frames = 15;
         var phase = _gen.nextInt(5) + 2;
 
@@ -39,7 +38,7 @@ public class TS_CaptchaGimpyShear implements TS_CaptchaGimpy {
                     * Math.sin((double) i / (double) period
                             + (6.2831853071795862D * phase) / frames);
             g.copyArea(0, i, w1, 1, (int) d, 0);
-            if (borderGap) {
+            if (borderGap_defaulTrue) {
                 g.setColor(_color);
                 g.drawLine((int) d, i, 0, i);
                 g.drawLine((int) d + w1, i, w1, i);
@@ -47,10 +46,9 @@ public class TS_CaptchaGimpyShear implements TS_CaptchaGimpy {
         }
     }
 
-    private void shearY(Graphics2D g, int w1, int h1) {
+    private void shearY(Graphics2D g, int w1, int h1, boolean borderGap_defaulTrue) {
         var period = _gen.nextInt(30) + 10; // 50;
 
-        var borderGap = true;
         var frames = 15;
         var phase = 7;
         for (var i = 0; i < w1; i++) {
@@ -58,7 +56,7 @@ public class TS_CaptchaGimpyShear implements TS_CaptchaGimpy {
                     * Math.sin((float) i / period
                             + (6.2831853071795862D * phase) / frames);
             g.copyArea(i, 0, 1, h1, 0, (int) d);
-            if (borderGap) {
+            if (borderGap_defaulTrue) {
                 g.setColor(_color);
                 g.drawLine(i, (int) d, i, 0);
                 g.drawLine(i, (int) d + h1, i, h1);

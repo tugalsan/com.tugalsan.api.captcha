@@ -48,13 +48,11 @@ public class TS_CaptchaTextDefault implements TS_CaptchaText {
     @Override
     public String getText() {
         var car = _srcChars.length - 1;
-
-        var capText = "";
+        var capText = new StringBuilder();
         for (var i = 0; i < _length; i++) {
-            capText += _srcChars[_gen().nextInt(car) + 1];
+            capText.append(_srcChars[_gen().nextInt(car) + 1]);
         }
-
-        return capText;
+        return capText.toString();
     }
 
     public static char[] copyOf(char[] original, int newLength) {

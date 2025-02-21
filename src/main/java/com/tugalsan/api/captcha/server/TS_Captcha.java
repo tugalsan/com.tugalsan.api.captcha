@@ -3,8 +3,6 @@ package com.tugalsan.api.captcha.server;
 import com.tugalsan.api.log.server.*;
 import java.awt.*;
 import java.awt.image.*;
-import java.io.*;
-import javax.imageio.*;
 import com.tugalsan.api.captcha.server.renderer.TS_CaptchaRenderer;
 import com.tugalsan.api.random.server.*;
 import com.tugalsan.api.captcha.server.renderer.*;
@@ -12,20 +10,19 @@ import com.tugalsan.api.captcha.server.bg.*;
 import com.tugalsan.api.captcha.server.gimpy.*;
 import com.tugalsan.api.captcha.server.noise.*;
 import com.tugalsan.api.captcha.server.text.*;
-import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
 
 
-public final class TS_Captcha implements Serializable {
+public final class TS_Captcha {
 
     final private static TS_Log d = TS_Log.of(TS_Captcha.class);
 
-    private final Builder _builder;
+    private final Builder builder;
 
     private TS_Captcha(Builder builder) {
-        _builder = builder;
+        this.builder = builder;
     }
 
-    public static class Builder implements Serializable {
+    public static class Builder  {
 
         private String _answer = "";
         private BufferedImage _img;
@@ -263,31 +260,31 @@ public final class TS_Captcha implements Serializable {
             return new TS_Captcha(this);
         }
 
-        private void writeObject(ObjectOutputStream out) {
-            TGS_FuncMTCEUtils.run(() -> {
-                out.writeObject(_answer);
-                ImageIO.write(_img, "png", ImageIO.createImageOutputStream(out));
-            });
-        }
-
-        private void readObject(ObjectInputStream in) {
-            TGS_FuncMTCEUtils.run(() -> {
-                _answer = (String) in.readObject();
-                _img = ImageIO.read(ImageIO.createImageInputStream(in));
-            });
-        }
+//        private void writeObject(ObjectOutputStream out) {
+//            TGS_FuncMTCEUtils.run(() -> {
+//                out.writeObject(_answer);
+//                ImageIO.write(_img, "png", ImageIO.createImageOutputStream(out));
+//            });
+//        }
+//
+//        private void readObject(ObjectInputStream in) {
+//            TGS_FuncMTCEUtils.run(() -> {
+//                _answer = (String) in.readObject();
+//                _img = ImageIO.read(ImageIO.createImageInputStream(in));
+//            });
+//        }
     }
 
     public String getAnswer() {
-        return _builder._answer;
+        return builder._answer;
     }
 
     public BufferedImage getImage() {
-        return _builder._img;
+        return builder._img;
     }
 
     @Override
     public String toString() {
-        return _builder.toString();
+        return builder.toString();
     }
 }

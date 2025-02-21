@@ -6,6 +6,10 @@ import com.tugalsan.api.thread.client.TGC_ThreadUtils;
 import com.tugalsan.api.url.client.builder.TGS_UrlBuilderUtils;
 
 public class TGC_CaptchaUtils {
+    
+    private TGC_CaptchaUtils(){
+        
+    }
 
 //    final private static TGC_Log d = TGC_Log.of(TGC_CaptchaUtils.class);
     private static String tmpUrl() {

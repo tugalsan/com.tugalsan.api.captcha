@@ -10,6 +10,8 @@ import com.tugalsan.api.list.client.*;
  * @author nyilmaz
  */
 public class TS_CaptchaRendererAligned implements TS_CaptchaRenderer {
+    
+    
 
     private static Color DEFAULT_COLOR() {
         return Color.BLACK;

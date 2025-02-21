@@ -16,6 +16,10 @@ import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 
 public class TS_CaptchaMemUtils {
+    
+    private TS_CaptchaMemUtils(){
+        
+    }
 
     final private static TS_Log d = TS_Log.of(TS_CaptchaMemUtils.class);
     final private static TS_ThreadSyncLst<TS_CaptchaMemItem> SYNC = TS_ThreadSyncLst.ofSlowRead();

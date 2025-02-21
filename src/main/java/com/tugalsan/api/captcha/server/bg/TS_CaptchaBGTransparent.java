@@ -1,6 +1,7 @@
 package com.tugalsan.api.captcha.server.bg;
 
 import java.awt.AlphaComposite;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
 /**
@@ -18,7 +19,7 @@ public class TS_CaptchaBGTransparent implements TS_CaptchaBG {
 
     @Override
     public BufferedImage getBackground(int width, int height) {
-        var bg = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
+        var bg = new BufferedImage(width, height, Transparency.TRANSLUCENT);
         var g = bg.createGraphics();
 
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.0f));

@@ -47,7 +47,8 @@ public class TS_CaptchaNoiseStraightLine implements TS_CaptchaNoise {
         var dX = x2 - X1;
         var dY = y2 - y1;
         // line length
-        var lineLength = Math.sqrt(dX * dX + dY * dY);
+        var tmp = dX * dX + dY * dY;
+        var lineLength = Math.sqrt(tmp);
 
         var scale = _thickness / (2 * lineLength);
 

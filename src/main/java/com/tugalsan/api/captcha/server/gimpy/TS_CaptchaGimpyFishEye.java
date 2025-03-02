@@ -74,7 +74,8 @@ public class TS_CaptchaGimpyFishEye implements TS_CaptchaGimpy {
                 var relX = x - wMid;
                 var relY = y - hMid;
 
-                var d1 = Math.sqrt(relX * relX + relY * relY);
+                var tmp = relX * relX + relY * relY;
+                var d1 = Math.sqrt(tmp);
                 if (d1 < distance) {
 
                     var j2 = wMid

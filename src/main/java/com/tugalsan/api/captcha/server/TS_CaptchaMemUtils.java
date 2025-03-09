@@ -26,7 +26,7 @@ public class TS_CaptchaMemUtils {
 
     public static void initialize(TS_ThreadSyncTrigger killTrigger) {
         TS_SURLExecutorList.add(new TS_CaptchaSUEMemRefresh());
-        TS_ThreadAsyncScheduled.everyMinutes(killTrigger, Duration.ofSeconds(10), false, 10, kt -> {
+        TS_ThreadAsyncScheduled.everyMinutes(killTrigger.newChild(d.className), Duration.ofSeconds(10), false, 10, kt -> {
             SYNC.removeAll(item -> item.time.hasSmaller(TGS_Time.ofMinutesAgo(10)));
             d.ci("initialize", "cleanUp.done");
         });

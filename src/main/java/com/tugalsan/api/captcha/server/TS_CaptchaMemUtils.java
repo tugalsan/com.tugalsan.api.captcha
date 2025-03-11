@@ -24,9 +24,9 @@ public class TS_CaptchaMemUtils {
     final private static TS_Log d = TS_Log.of(TS_CaptchaMemUtils.class);
     final private static TS_ThreadSyncLst<TS_CaptchaMemItem> SYNC = TS_ThreadSyncLst.ofSlowRead();
 
-    public static void initialize(TS_ThreadSyncTrigger killTrigger) {
+    public static void initialize(TS_ThreadSyncTrigger killTriggerContext) {
         TS_SURLExecutorList.add(new TS_CaptchaSUEMemRefresh());
-        TS_ThreadAsyncScheduled.everyMinutes("remove_captcha_buffer_every10min", killTrigger.newChild(d.className), Duration.ofSeconds(10), false, 10, kt -> {
+        TS_ThreadAsyncScheduled.everyMinutes("remove_captcha_buffer_every10min", killTriggerContext.newChild(d.className), Duration.ofSeconds(10), false, 10, kt -> {
             SYNC.removeAll(item -> item.time.hasSmaller(TGS_Time.ofMinutesAgo(10)));
             d.ci("initialize", "cleanUp.done");
         });

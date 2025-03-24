@@ -261,14 +261,14 @@ public final class TS_Captcha {
         }
 
 //        private void writeObject(ObjectOutputStream out) {
-//            TGS_FuncMTCEUtils.run(() -> {
+//            TGS_FuncMTCUtils.run(() -> {
 //                out.writeObject(_answer);
 //                ImageIO.write(_img, "png", ImageIO.createImageOutputStream(out));
 //            });
 //        }
 //
 //        private void readObject(ObjectInputStream in) {
-//            TGS_FuncMTCEUtils.run(() -> {
+//            TGS_FuncMTCUtils.run(() -> {
 //                _answer = (String) in.readObject();
 //                _img = ImageIO.read(ImageIO.createImageInputStream(in));
 //            });

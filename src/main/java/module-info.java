@@ -1,4 +1,4 @@
-module com.tugalsan.api.captcha {
+module com.tugalsan.api.gwt.captcha {
     requires java.desktop;
     requires gwt.user;
     requires com.tugalsan.api.thread;
@@ -13,6 +13,6 @@ module com.tugalsan.api.captcha {
     
     requires com.tugalsan.api.random;
     requires com.tugalsan.api.servlet.url;
-    exports com.tugalsan.api.captcha.client;
-    exports com.tugalsan.api.captcha.server;
+    exports com.tugalsan.api.gwt.captcha.client;
+    exports com.tugalsan.api.gwt.captcha.server;
 }

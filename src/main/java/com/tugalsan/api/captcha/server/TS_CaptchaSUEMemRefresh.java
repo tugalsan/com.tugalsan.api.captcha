@@ -1,7 +1,7 @@
 package com.tugalsan.api.captcha.server;
 
 import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutBool_In1;
-import com.tugalsan.api.gwt.captcha.client.TGS_CaptchaUtils;
+import com.tugalsan.api.captcha.client.TGS_CaptchaUtils;
 import com.tugalsan.api.servlet.url.server.TS_SURLExecutor;
 import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler;
 import com.tugalsan.api.servlet.url.server.handler.TS_SURLHandler02ForFileImg;

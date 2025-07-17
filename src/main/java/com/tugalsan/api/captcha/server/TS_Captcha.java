@@ -2,12 +2,12 @@ package com.tugalsan.api.captcha.server;
 
 import java.awt.*;
 import java.awt.image.*;
-import com.tugalsan.api.gwt.captcha.server.bg.*;
-import com.tugalsan.api.gwt.captcha.server.gimpy.*;
-import com.tugalsan.api.gwt.captcha.server.noise.*;
+import com.tugalsan.api.captcha.server.bg.*;
+import com.tugalsan.api.captcha.server.gimpy.*;
+import com.tugalsan.api.captcha.server.noise.*;
 import com.tugalsan.api.log.server.*;
-import com.tugalsan.api.gwt.captcha.server.renderer.*;
-import com.tugalsan.api.gwt.captcha.server.text.*;
+import com.tugalsan.api.captcha.server.renderer.*;
+import com.tugalsan.api.captcha.server.text.*;
 import com.tugalsan.api.random.server.*;
 
 public final class TS_Captcha {

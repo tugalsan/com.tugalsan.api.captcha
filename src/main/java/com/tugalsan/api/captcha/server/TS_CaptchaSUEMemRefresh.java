@@ -9,7 +9,6 @@ import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
 
 public class TS_CaptchaSUEMemRefresh extends TS_SURLExecutor {
 
-//    final private static TS_Log d = TS_Log.of(TS_CaptchaSUEMemRefresh.class);
     @Override
     public String name() {
         return TGS_CaptchaUtils.SERVLET_REFRESH();

@@ -13,7 +13,7 @@ import com.tugalsan.api.random.server.*;
 public final class TS_Captcha {
 
     private static TS_Log d() {
-        return d.orElse(TS_Log.of(true, TS_Captcha.class));
+        return d.orElse(TS_Log.of( TS_Captcha.class));
     }
     final private static StableValue<TS_Log> d = StableValue.of();
 

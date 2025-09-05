@@ -22,7 +22,7 @@ public class TS_CaptchaMemUtils {
     }
 
     private static TS_Log d() {
-        return d.orElse(TS_Log.of(true, TS_CaptchaMemUtils.class));
+        return d.orElse(TS_Log.of( TS_CaptchaMemUtils.class));
     }
     final private static StableValue<TS_Log> d = StableValue.of();
     

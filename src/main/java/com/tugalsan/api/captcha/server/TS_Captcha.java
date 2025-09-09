@@ -9,13 +9,11 @@ import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.captcha.server.renderer.*;
 import com.tugalsan.api.captcha.server.text.*;
 import com.tugalsan.api.random.server.*;
+import java.util.function.Supplier;
 
 public final class TS_Captcha {
 
-    private static TS_Log d() {
-        return d.orElse(TS_Log.of( TS_Captcha.class));
-    }
-    final private static StableValue<TS_Log> d = StableValue.of();
+    final private static Supplier<TS_Log> d = StableValue.supplier(() -> TS_Log.of(TS_Captcha.class));
 
     private final Builder builder;
 
@@ -45,13 +43,13 @@ public final class TS_Captcha {
 
         public Builder addBackgroundPreffered() {
             var rndBg = TS_RandomUtils.nextInt(0, 1);
-            d().ci("prefBg", rndBg);
+            d.get().ci("prefBg", rndBg);
             return addBackgroundIdx(rndBg);
         }
 
         public Builder addBackgroundRandom() {
             var rndBg = TS_RandomUtils.nextInt(0, 3);
-            d().ci("rndBg", rndBg);
+            d.get().ci("rndBg", rndBg);
             return addBackgroundIdx(rndBg);
         }
 
@@ -81,9 +79,9 @@ public final class TS_Captcha {
 
         public Builder addTextRandom() {
             var rndTxt = TS_RandomUtils.nextInt(0, 1);
-            d().ci("rndTxt", rndTxt);
+            d.get().ci("rndTxt", rndTxt);
             var rndWord = TS_RandomUtils.nextInt(0, 2);
-            d().ci("rndWord", rndWord);
+            d.get().ci("rndWord", rndWord);
             return addTextIdx(rndTxt, rndWord);
         }
 
@@ -93,9 +91,9 @@ public final class TS_Captcha {
 
         public Builder addTextPreffered(boolean onlyNumbers) {
             var rndTxt = onlyNumbers ? 1 : TS_RandomUtils.nextInt(0, 1);
-            d().ci("rndTxt", rndTxt);
+            d.get().ci("rndTxt", rndTxt);
             var rndRenderer = TS_RandomUtils.nextInt(0, 1);
-            d().ci("rndRenderer", rndRenderer);
+            d.get().ci("rndRenderer", rndRenderer);
             return addTextIdx(rndTxt, rndRenderer);
         }
 
@@ -132,7 +130,7 @@ public final class TS_Captcha {
 
         public Builder addNoiseRandom() {
             var rndNoise = TS_RandomUtils.nextInt(0, 1);
-            d().ci("rndNoise", rndNoise);
+            d.get().ci("rndNoise", rndNoise);
             return addNoiseIdx(rndNoise);
         }
 
@@ -155,13 +153,13 @@ public final class TS_Captcha {
 
         public Builder addGimpPreffered() {
             var gimp = 1;
-            d().ci("prefGimp", gimp);
+            d.get().ci("prefGimp", gimp);
             return addGimpIdx(gimp);
         }
 
         public Builder addGimpRandom() {
             var rndGimp = TS_RandomUtils.nextInt(0, 1);
-            d().ci("rndGimp", rndGimp);
+            d.get().ci("rndGimp", rndGimp);
             return addGimpIdx(rndGimp);
         }
 
@@ -184,7 +182,7 @@ public final class TS_Captcha {
 
         public Builder addBorderRandom() {
             var rndBorder = TS_RandomUtils.nextBoolean();
-            d().ci("rndBorder", rndBorder);
+            d.get().ci("rndBorder", rndBorder);
             addBorder(rndBorder);
             return this;
         }

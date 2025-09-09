@@ -13,6 +13,7 @@ import com.tugalsan.api.union.client.TGS_UnionExcuseVoid;
 import com.tugalsan.api.url.server.TS_UrlServletRequestUtils;
 import java.time.Duration;
 import java.util.Objects;
+import java.util.function.Supplier;
 import javax.servlet.http.HttpServletRequest;
 
 public class TS_CaptchaMemUtils {
@@ -21,43 +22,40 @@ public class TS_CaptchaMemUtils {
 
     }
 
-    private static TS_Log d() {
-        return d.orElse(TS_Log.of( TS_CaptchaMemUtils.class));
-    }
-    final private static StableValue<TS_Log> d = StableValue.of();
-    
+    final private static Supplier<TS_Log> d = StableValue.supplier(() -> TS_Log.of(TS_CaptchaMemUtils.class));
+
     final private static TS_ThreadSyncLst<TS_CaptchaMemItem> SYNC = TS_ThreadSyncLst.ofSlowRead();
 
     public static void initialize(TS_ThreadSyncTrigger killTriggerContext) {
         TS_SURLExecutorList.add(new TS_CaptchaSUEMemRefresh());
-        TS_ThreadAsyncScheduled.everyMinutes("remove_captcha_buffer_every10min", killTriggerContext.newChild(d().className), Duration.ofSeconds(10), false, 10, kt -> {
+        TS_ThreadAsyncScheduled.everyMinutes("remove_captcha_buffer_every10min", killTriggerContext.newChild(d.get().className), Duration.ofSeconds(10), false, 10, kt -> {
             SYNC.removeAll(item -> item.time.hasSmaller(TGS_Time.ofMinutesAgo(10)));
-            d().ci("initialize", "cleanUp.done");
+            d.get().ci("initialize", "cleanUp.done");
         });
     }
 
     public static TGS_UnionExcuseVoid validate(HttpServletRequest rq) {
         var u = getServer(rq);
         if (u.isExcuse()) {
-            d().ce(d().className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "server==null", u.excuse().getMessage());
+            d.get().ce(d.get().className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "server==null", u.excuse().getMessage());
             return u.toExcuseVoid();
         }
         var captchaServer = u.value();
         var captchaClient = getClient(rq);
         if (captchaClient.guess() == null) {
-            d().ce(d().className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "captchaClient.guess==null");
-            return TGS_UnionExcuseVoid.ofExcuse(d().className, "validate", "captchaClient.guess() == null");
+            d.get().ce(d.get().className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA", "captchaClient.guess==null");
+            return TGS_UnionExcuseVoid.ofExcuse(d.get().className, "validate", "captchaClient.guess() == null");
         }
         var result = captchaClient.guess().toString().compareToIgnoreCase(//NO TURKISH CHECK NEEDED
                 String.valueOf(captchaServer.answer)
         ) == 0;
         if (!result) {
-            d().ce(d().className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA",
+            d.get().ce(d.get().className, "ERROR: STATUS_REJECTED_WRONG_CAPTCHA",
                     "client", captchaClient.clientIp(), captchaClient.guess(),
                     "server", captchaServer.clientIp, captchaServer.answer, captchaServer.time
             );
             delServer(rq);
-            return TGS_UnionExcuseVoid.ofExcuse(d().className, "validate", "wrong captcha");
+            return TGS_UnionExcuseVoid.ofExcuse(d.get().className, "validate", "wrong captcha");
         }
         return TGS_UnionExcuseVoid.ofVoid();
     }
@@ -93,13 +91,13 @@ public class TS_CaptchaMemUtils {
         var val = SYNC.findFirst(item -> Objects.equals(item.clientIp, clientIp));
         if (val == null) {
             if (SYNC.isEmpty()) {
-                d().ce("getServer", "list.empty");
+                d.get().ce("getServer", "list.empty");
             } else {
                 SYNC.forEach(false, item -> {
-                    d().ce("getServer", "list.item", item);
+                    d.get().ce("getServer", "list.item", item);
                 });
             }
-            return TGS_UnionExcuse.ofExcuse(d().className, "getServer", "clientIp not found:" + clientIp);
+            return TGS_UnionExcuse.ofExcuse(d.get().className, "getServer", "clientIp not found:" + clientIp);
         }
         return TGS_UnionExcuse.of(val);
     }
